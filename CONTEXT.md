@@ -51,7 +51,11 @@ Three roles, in this order:
 
 Open to: partnerships, investment (wedesignerz and future projects), connections, project proposals. Hiring/full-time is an option, not the goal.
 
-Facts for copy: designer 5+ years; works with AI since 2023 and started coding with AI the same year — i.e. before the term "vibe coding" was coined (Karpathy, Feb 2025). Phrase it via dates, never "first/pioneer". Automates routine to spend time on quality, usability and product logic (need concrete examples before publishing).
+Facts for copy: designer 5+ years; works with AI since 2023 and started coding with AI the same year — i.e. before the term "vibe coding" was coined (Karpathy, Feb 2025). Phrase it via dates, never "first/pioneer". AI does the routine, decisions stay with Art. Work: video editing, code, tests, security checks, graphics, images, research. Life: reads email and surfaces only what matters, tracks new episodes/seasons of shows he watches, reacts to wedesignerz monitoring alerts. List will grow.
+
+Canonical name: **Art Androsov** (EN), **Артём Андросов** (RU); alternateName Artem Androsov. Intense Wellness: client permission to show the work — yes (after launch).
+
+No public deploys until the new site is ready. Art checks everything locally; nothing merges to `main` (deploy triggers on main).
 
 Site redesign: not rushing. Launch when three strong works are ready (wedesignerz.com, Intense Wellness, new androsov.art itself). New site = showreel feel, effective but clear and tasteful, with 3D (Art's first 3D project). Plus articles/guides so AI search can source info about Art from the site.
 
@@ -89,9 +93,12 @@ These drive all his content choices. When in doubt, prefer the principle over th
 ## 6. We Designerz
 
 - **wedesignerz.com** (live, RU-language): club for vibe coders — people building products with AI, often without coding background. Project showcase with moderation and "Выбор клуба" badge, structured feedback (bug / idea / UX), threaded discussions, versioned project updates, free Academy guides (paying for AI from Russia, making a game with AI, pre-publication security, GitHub Pages hosting). Core is free; paid features "later". Hero: «Если смог описать — можешь создать.» Links: Telegram channel wedesignerz, chat wdzclub, YouTube @wedesignerz.
-- As of 2026-11-04, wedesignerz.com home shows no founder mention and `/about` returns 404 — no link between platform and androsov.art yet.
+- **Team (wedesignerz.com/about.html):** 4 people — Тёма (Art; «вайбкодер и ведущий»: vibe-codes the platform and hosts the channel), Алина (designer), Андрей (producer), Рома (product & marketing, socials). Copy uses «мы» / «делаем вчетвером». Don't name teammates on androsov.art — link to wedesignerz instead.
+- Art is listed only as «Тёма», no surname, no link to androsov.art; Organization JSON-LD has no founder/member. Fix on wedesignerz side = cheapest entity link.
+- Don't publish wedesignerz numbers (members/projects/subscribers) yet — Art: nothing to be proud of yet.
+- Site itself is strong case material: CSP, carefully commented robots.txt, JSON-LD, JSON/RSS feeds, indexing opened 2026-08-29.
 - YouTube channel: 370K+ views (383K+ on the site), growing organically since 2024. Primary topic: AI in work and life; secondary: design.
-- Previously described as run with his partner, not a company. **Open question (2026-11):** is the platform "I" or "we" in copy? Don't write "studio"/"team"/"agency" until answered.
+- Not a registered company: don't write "studio"/"agency". "Team" is fine (the platform itself says so). Bio uses "co-founder" — pending Art's confirmation.
 
 ## 7. Schedule & timezone
 
@@ -165,10 +172,11 @@ Things in progress or pending:
 
 ### Redesign 2026 (see docs/redesign-plan.md)
 - [x] New positioning + RU/EN copy drafts, bios, FAQ — `docs/positioning-2026.md`
-- [ ] Art to answer open questions (wedesignerz I/we, numbers, automation examples, canonical name, Intense permission, Bali)
-- [ ] Canonical name: titles say "Artem Androsov", footer "Art Androsov" — recommendation: Art Androsov (EN), Арт Андросов (RU), alternateName Artem / Артём
+- [x] Open questions answered (we/team, no numbers, automation examples, name, Intense permission)
+- [ ] Confirm "co-founder" wording; clarify socials (Art said he runs platform socials, wedesignerz about page assigns socials to Рома)
+- [ ] Canonical name in code: titles "Artem Androsov" → "Art Androsov"
 - [ ] Person JSON-LD, sitemap, robots.txt, hreflang; un-noindex RU after RU copy cleanup
-- [ ] wedesignerz.com: founder page + link back to androsov.art
+- [ ] wedesignerz.com: add surname + link to androsov.art on «Тёма» card; founder/member in Organization JSON-LD
 - [ ] 3D: learning sandbox (concept B) → prototype "prompt → product" (concept A)
 - [ ] New IA: /, /work, /now, /writing, /about (+ /ru mirrors); old /projects/* URLs stay
 - [ ] Remove "Available / Contract / Full-time" badge and CV from nav at relaunch
