@@ -4,7 +4,7 @@
 > Read this first before any conversational or content work.
 > Update whenever a new fact, principle, or correction emerges.
 
-Last updated: 2026-04-29
+Last updated: 2026-11-04
 
 ---
 
@@ -40,12 +40,27 @@ Don't say "Bali clients" or "out of Bali" in copy — geography is global, not l
 
 ## 3. Goal (north star)
 
-Senior Product Designer remote role at a US/EU company.
+**Updated 2026-11-04 — positioning shift.** Art is no longer positioning as a job seeker. The site should be about what he does, not about getting hired.
 
-- Target comp: **$3K+/month** (and rising once positioning is fixed)
-- Format: contract or full-time
-- Time horizon: actively interviewing
-- Channels: LinkedIn (in active optimization), portfolio site, Cal.com inbound
+Core line: **"I design products and build them myself with AI."**
+
+Three roles, in this order:
+1. **Builds his own:** wedesignerz.com — a club/platform for vibe coders (RU-language). Art builds the product and runs the platform's socials.
+2. **Client work:** design + product for companies in the UK, Switzerland, Indonesia, Russia. Current: Intense Wellness (UK, intensew.co.uk) brand redesign, launch expected Nov 2026. Possible: EmTech Invest website (NOT confirmed — don't mention publicly).
+3. **Tells about it:** We Designerz socials/YouTube, articles on androsov.art.
+
+Open to: partnerships, investment (wedesignerz and future projects), connections, project proposals. Hiring/full-time is an option, not the goal.
+
+Facts for copy: designer 5+ years; works with AI since 2023 and started coding with AI the same year — i.e. before the term "vibe coding" was coined (Karpathy, Feb 2025). Phrase it via dates, never "first/pioneer". Automates routine to spend time on quality, usability and product logic (need concrete examples before publishing).
+
+Site redesign: not rushing. Launch when three strong works are ready (wedesignerz.com, Intense Wellness, new androsov.art itself). New site = showreel feel, effective but clear and tasteful, with 3D (Art's first 3D project). Plus articles/guides so AI search can source info about Art from the site.
+
+Working docs: `docs/positioning-2026.md` (copy RU/EN, bios, open questions), `docs/redesign-plan.md` (IA, 3D concepts, stack, AI-findability, content plan).
+
+Tone for new copy: live, with character, no pathos, friendly, not AI-sounding.
+
+### Superseded (until 2026-11)
+Was: Senior Product Designer remote role at a US/EU company, $3K+/month, actively interviewing. Many case-page decisions in section 10 were made for that HR audience — still valid as honesty filters, but the "write for HR" lens no longer drives new copy.
 
 ---
 
@@ -71,16 +86,12 @@ These drive all his content choices. When in doubt, prefer the principle over th
 
 ---
 
-## 6. We Designerz (YouTube channel)
+## 6. We Designerz
 
-- 370K+ views, growing organically since 2024
-- **Primary topic: AI in work and life** (use cases, tools, prompt engineering, workflows)
-- **Secondary topic:** Design — UX/UI, product, game design teardowns
-- Run with his partner; not a company; not a team
-
-When mentioning the channel in copy: lead with AI focus, mention design episodes as secondary. Don't position it as "UX education" alone — that's the old framing.
-
----
+- **wedesignerz.com** (live, RU-language): club for vibe coders — people building products with AI, often without coding background. Project showcase with moderation and "Выбор клуба" badge, structured feedback (bug / idea / UX), threaded discussions, versioned project updates, free Academy guides (paying for AI from Russia, making a game with AI, pre-publication security, GitHub Pages hosting). Core is free; paid features "later". Hero: «Если смог описать — можешь создать.» Links: Telegram channel wedesignerz, chat wdzclub, YouTube @wedesignerz.
+- As of 2026-11-04, wedesignerz.com home shows no founder mention and `/about` returns 404 — no link between platform and androsov.art yet.
+- YouTube channel: 370K+ views (383K+ on the site), growing organically since 2024. Primary topic: AI in work and life; secondary: design.
+- Previously described as run with his partner, not a company. **Open question (2026-11):** is the platform "I" or "we" in copy? Don't write "studio"/"team"/"agency" until answered.
 
 ## 7. Schedule & timezone
 
@@ -151,6 +162,16 @@ Things in progress or pending:
 - [ ] Replace anonymous quote on Talent page (or remove)
 - [ ] Soften client-blame language on EmTech Invest, LOYO & BONDAR cases
 - [ ] Fix LOYO slug → `/projects/loyo-and-bondar`
+
+### Redesign 2026 (see docs/redesign-plan.md)
+- [x] New positioning + RU/EN copy drafts, bios, FAQ — `docs/positioning-2026.md`
+- [ ] Art to answer open questions (wedesignerz I/we, numbers, automation examples, canonical name, Intense permission, Bali)
+- [ ] Canonical name: titles say "Artem Androsov", footer "Art Androsov" — recommendation: Art Androsov (EN), Арт Андросов (RU), alternateName Artem / Артём
+- [ ] Person JSON-LD, sitemap, robots.txt, hreflang; un-noindex RU after RU copy cleanup
+- [ ] wedesignerz.com: founder page + link back to androsov.art
+- [ ] 3D: learning sandbox (concept B) → prototype "prompt → product" (concept A)
+- [ ] New IA: /, /work, /now, /writing, /about (+ /ru mirrors); old /projects/* URLs stay
+- [ ] Remove "Available / Contract / Full-time" badge and CV from nav at relaunch
 
 ---
 

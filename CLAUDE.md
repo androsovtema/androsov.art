@@ -134,3 +134,11 @@ YouTube: (as in current footer)
 - GitHub Pages deploy via GitHub Actions (astro.yml workflow)
 - Visual result must match current site exactly — this is a tech migration,
   not a redesign
+---
+
+## 12. Redesign 2026 (planned, not started)
+
+Migration above is done. A full redesign is planned — see `docs/redesign-plan.md`
+(IA, 3D concepts, stack, AI-findability) and `docs/positioning-2026.md` (new copy).
+During the redesign the "visual must match" and "no JS" constraints from §11 are
+lifted for the 3D layer only; all content must still render as static HTML.
