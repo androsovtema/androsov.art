@@ -45,7 +45,7 @@ Don't say "Bali clients" or "out of Bali" in copy — geography is global, not l
 Core line: **"I design products and build them myself with AI."**
 
 Three roles, in this order:
-1. **Builds his own:** wedesignerz.com — a club/platform for vibe coders (RU-language). Art builds the product and runs the platform's socials.
+1. **Builds his own:** wedesignerz.com — a club/platform for vibe coders (RU-language). Art founded it, builds the platform and hosts the videos. Socials are Рома's.
 2. **Client work:** design + product for companies in the UK, Switzerland, Indonesia, Russia. Current: Intense Wellness (UK, intensew.co.uk) brand redesign, launch expected Nov 2026. Possible: EmTech Invest website (NOT confirmed — don't mention publicly).
 3. **Tells about it:** We Designerz socials/YouTube, articles on androsov.art.
 
@@ -94,11 +94,11 @@ These drive all his content choices. When in doubt, prefer the principle over th
 
 - **wedesignerz.com** (live, RU-language): club for vibe coders — people building products with AI, often without coding background. Project showcase with moderation and "Выбор клуба" badge, structured feedback (bug / idea / UX), threaded discussions, versioned project updates, free Academy guides (paying for AI from Russia, making a game with AI, pre-publication security, GitHub Pages hosting). Core is free; paid features "later". Hero: «Если смог описать — можешь создать.» Links: Telegram channel wedesignerz, chat wdzclub, YouTube @wedesignerz.
 - **Art is the founder.** He invented and built We Designerz himself: YouTube channel → design studio under this name → club for vibe coders. The team joined later; for now Art still does most of the work. He doesn't care about titles and doesn't want to offend anyone — the project living matters to him. Copy: «придумал и сделал», «развиваем вчетвером». Never «всё делаю я один».
-- **Team (wedesignerz.com/about.html):** 4 people — Тёма (Art), Алина (designer), Андрей (producer), Рома (product & marketing). Real split: Art — platform, appears in all videos, editing (via AI), all socials (accounts are his, access shared). Рома — topics, some scripts, Instagram posts. Don't name teammates on androsov.art — link to wedesignerz instead.
+- **Team (wedesignerz.com/about.html):** 4 people — Тёма (Art), Алина (designer), Андрей (producer), Рома (product & marketing). Public split (keep identical on both sites): Art — platform (vibe-codes it), host of all videos, editing (done by AI). Рома — socials (topics, some scripts, Instagram posts). Behind the scenes the social accounts belong to Art, but publicly socials = Рома. Don't name teammates on androsov.art — link to wedesignerz instead.
 - Art is listed only as «Тёма», no surname, no link to androsov.art; Organization JSON-LD has no founder/member. Fix on wedesignerz side = cheapest entity link.
 - Don't publish wedesignerz numbers (members/projects/subscribers) yet — Art: nothing to be proud of yet.
 - Site itself is strong case material: CSP, carefully commented robots.txt, JSON-LD, JSON/RSS feeds, indexing opened 2026-08-29.
-- YouTube channel: 370K+ views (383K+ on the site), growing organically since 2024. Primary topic: AI in work and life; secondary: design.
+- YouTube channel: 370K+ views (383K+ on the site), registered 14 Apr 2025, growing organically. Primary topic: AI in work and life; secondary: design.
 - Not a registered company: don't write "studio"/"agency". "Team" is fine (the platform itself says so). Bio uses "founder" (confirmed 2026-11-04). "Was a design studio" is fine as history.
 
 ## 7. Schedule & timezone
@@ -174,8 +174,8 @@ Things in progress or pending:
 ### Redesign 2026 (see docs/redesign-plan.md)
 - [x] New positioning + RU/EN copy drafts, bios, FAQ — `docs/positioning-2026.md`
 - [x] Open questions answered (we/team, no numbers, automation examples, name, Intense permission)
-- [x] Role: founder; socials/videos on Art, Рома — topics, some scripts, Instagram posts
-- [ ] Optional: align wedesignerz about.html roles (currently «Рома ведёт соцсети»)
+- [x] Role: founder; Art = platform + video host + editing (AI); socials = Рома (same on both sites)
+- [ ] wedesignerz about.html, Тёма card: add «Артём Андросов», «Основатель», link to androsov.art
 - [ ] Canonical name in code: titles "Artem Androsov" → "Art Androsov"
 - [ ] Person JSON-LD, sitemap, robots.txt, hreflang; un-noindex RU after RU copy cleanup
 - [ ] wedesignerz.com: add surname + link to androsov.art on «Тёма» card; founder/member in Organization JSON-LD
