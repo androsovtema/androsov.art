@@ -1,8 +1,8 @@
 # CLAUDE.md — Art Androsov Portfolio
 
-## 0. Read CONTEXT.md first
+## 0. Read CONTEXT.md and docs/HANDOFF.md first
 
-**Before any conversational work, copywriting, or recommendation about positioning, read `/Users/prosto/Desktop/01_Projects/artandrosov/CONTEXT.md`.**
+**Before any conversational work, copywriting, or recommendation about positioning, read `CONTEXT.md` (repo root; local copy at `/Users/prosto/Desktop/01_Projects/artandrosov/CONTEXT.md`) and `docs/HANDOFF.md` (current status and next steps).**
 
 CONTEXT.md is a living document about Art (the human): identity, goals, working principles, current clients, what he can/can't defend in interview, what NOT to claim, and the list of open site-work threads. Update it whenever a new fact, correction, or principle emerges from conversation — append to the relevant section, keep it current. Never duplicate its contents into chat unless Art asks.
 
