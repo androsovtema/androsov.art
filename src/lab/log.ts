@@ -35,6 +35,7 @@ uniform vec3 uWobble[4];
 uniform float uGrow;
 uniform float uTime;
 uniform float uLogo;                   // 0..1: the cut turns into the 3-ring logo
+uniform float uStyle;                  // 0 realistic wood, 1 engraving (two colours, rings as lines)
 varying vec3 vLocal;
 float outlineF(float th){ float f = 1.0; for (int i = 0; i < 4; i++){ f += uWobble[i].y * sin(uWobble[i].x * th + uWobble[i].z); } return f; }
 vec3 perturbN(vec3 surf_pos, vec3 surf_norm, vec2 dHdxy, float faceDirection){
@@ -82,6 +83,7 @@ void woodSample(vec2 p){
     vec3 bark = mix(vec3(0.27, 0.18, 0.13), vec3(0.43, 0.27, 0.18), b);
     float cam = 1.0 - smoothstep(0.0, 0.007, rr - edge);
     wColor = mix(bark, barkIn, cam * 0.7);
+    if (uStyle > 0.5) wColor = vec3(0.12, 0.17, 0.14);
     wHeight = -0.4 + 0.5 * b; wRough = 0.95; wEmissive = vec3(0.0);
     wAlpha = 1.0 - uLogo;
     return;
@@ -197,6 +199,31 @@ void woodSample(vec2 p){
     }
   }
 
+  // engraving: fog paper, needle ink, every year a line, knots solid ink, highlight in resin
+  if (uStyle > 0.5) {
+    vec3 paper = vec3(0.90, 0.92, 0.89);
+    vec3 ink = vec3(0.12, 0.17, 0.14);
+    float lw = max(fpx * 1.3, 0.012);
+    float yearLine = 1.0 - smoothstep(lw * 0.5, lw, 1.0 - f);
+    float fine = smoothstep(0.55, 0.9, abs(sin(f * 3.14159 * 4.0 + n1)));
+    fine *= (1.0 - smoothstep(0.0, 1.0, abs(snoise(vec2(th * 3.0, w * 4.0))))) * 0.35;
+    vec3 e = mix(paper, ink, clamp(yearLine + fine * 0.5, 0.0, 1.0));
+    if (idx < 0.0) e = mix(ink, paper, smoothstep(0.35, 0.55, f));
+    if (knotId >= 0) {
+      float body = 1.0 - smoothstep(0.92, 1.05, knotD);
+      float hi = uKnotHi[knotId];
+      e = mix(e, mix(ink, vec3(0.89, 0.63, 0.18), hi), body);
+    }
+    if (uActiveAmt > 0.001) {
+      float isA = 1.0 - step(0.5, abs(idx - uActiveRing));
+      e = mix(e, mix(e, vec3(0.95, 0.80, 0.50), 0.55), isA * uActiveAmt * (1.0 - yearLine));
+    }
+    float own = cos(th) >= 0.0 ? 0.0 : 1.0;
+    float dimE = own < 0.5 ? uSideHi.x : uSideHi.y;
+    e = mix(e, mix(e, paper, 0.7), dimE);
+    col = e; emi = vec3(0.0); h *= 0.15; rough = 0.95;
+  }
+
   // finale: only the three rings of the logo stay, in ink, everything else dissolves
   wAlpha = 1.0;
   if (uLogo > 0.0) {
@@ -232,6 +259,12 @@ void barkSample(vec3 lp){
   c = mix(dark, c, fiss);
   bColor = c;
   bHeight = fiss * (0.7 + 0.3 * cells) + 0.25 * flakes;
+  if (uStyle > 0.5) {
+    // vertical hatching, like an engraved bark
+    float hatch = smoothstep(0.35, 0.5, abs(fract(th * 90.0 + 0.4 * cells) - 0.5));
+    bColor = mix(vec3(0.12, 0.17, 0.14), vec3(0.62, 0.66, 0.61), hatch * fiss);
+    bHeight *= 0.3;
+  }
 }
 `;
 
@@ -249,6 +282,7 @@ export interface LogOptions {
   segments?: number;
   micro?: number;
   cracks?: boolean;
+  style?: 'wood' | 'engraving';
 }
 
 export interface LogHandle {
@@ -310,6 +344,7 @@ export function createLog(opts: LogOptions): LogHandle {
     uCracks: { value: opts.cracks === false ? 0 : 1 },
     uMicro: { value: opts.micro ?? 3 },
     uLogo: { value: 0 },
+    uStyle: { value: opts.style === 'engraving' ? 1 : 0 },
     uRadius: { value: radius },
   };
 
@@ -326,7 +361,7 @@ export function createLog(opts: LogOptions): LogHandle {
         normal = perturbN(-vViewPosition, normal, dH * 0.012, faceDirection);`)
       .replace('#include <emissivemap_fragment>', `totalEmissiveRadiance += pow(wEmissive, vec3(2.2));`);
   };
-  wood.customProgramCacheKey = () => 'wood-v1';
+  wood.customProgramCacheKey = () => 'wood-v2';
 
   const bark = new THREE.MeshStandardMaterial({ roughness: 0.92, metalness: 0 });
   bark.onBeforeCompile = (shader) => {

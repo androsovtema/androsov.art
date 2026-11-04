@@ -51,7 +51,8 @@ export function startCut() {
   rim.position.set(3, 1.5, -2);
   scene.add(rim);
 
-  const log: LogHandle = createLog({ rings: data.rings, knots: data.knots, segments: mobile ? 140 : 240 });
+  const engraving = params.get('style') === 'engraving';
+  const log: LogHandle = createLog({ rings: data.rings, knots: data.knots, segments: mobile ? 140 : 240, style: engraving ? 'engraving' : 'wood' });
   const pivot = new THREE.Group();
   pivot.add(log.group);
   scene.add(pivot);
@@ -183,8 +184,15 @@ export function startCut() {
     const len = Math.hypot(dx, dy) || 1;
     dx /= len; dy /= len;
     const W = stage.clientWidth, H = stage.clientHeight;
-    const reach = mobile ? 26 : 44;
-    let ax = end.x + dx * reach, ay = end.y + dy * reach;
+    // anchor outside the rim, so the label never sits on the wood or the bark
+    // the silhouette edge along this direction: top rim or bottom rim, whichever sticks out more
+    const topP = log.fromPolar(k.angle, 1.06);
+    const botP = topP.clone(); botP.y = -log.height / 2;
+    const a = project(topP), b = project(botP);
+    const da = (a.x - c.x) * dx + (a.y - c.y) * dy, db = (b.x - c.x) * dx + (b.y - c.y) * dy;
+    const edge = Math.max(da, db);
+    const reach = mobile ? 12 : 22;
+    let ax = c.x + dx * (edge + reach), ay = c.y + dy * (edge + reach);
     const right = dx >= 0;
     const tw = tip.offsetWidth || 140;
     ax = right ? Math.min(ax, W - tw - 8) : Math.max(ax, tw + 8);
