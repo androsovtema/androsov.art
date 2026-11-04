@@ -180,7 +180,8 @@ Things in progress or pending:
 - [ ] Person JSON-LD, sitemap, robots.txt, hreflang; un-noindex RU after RU copy cleanup
 - [ ] wedesignerz.com: add surname + link to androsov.art on «Тёма» card; founder/member in Organization JSON-LD
 - [x] 3D sandbox done (2026-11-04): concept "Srez" (pine cut = data-driven timeline index) + 4 logo variants — see `docs/3d-concept.md`. Concept A "prompt → product" not built; "Srez" replaced it as the lead idea (pending Art's verdict)
-- [ ] Art: measure FPS on his phone at `/lab/srez?fps`, pick direction
+- [x] Art's verdict on "Srez" (2026-11-04): rejected visually ("the cut with rings doesn't look good"). Replaced by game concept "Put'" (The Path) — see `docs/game-concept.md`. Key decisions: it's a game with buttons (not scroll), entry choice game/regular site, exit-to-text button with confirm, silhouettes + grain + fog, growth via armor and weapons (brushes/laptop rejected as banal), each project = a trial, length unlimited.
+- **Working principle (Art, 2026-11-04):** the site is a showreel-story to explore, not a conversion page. Don't simplify for speed of reading; the regular-site path covers that need.
 - **Logo meaning (from Art, 2026-11-04):** Art is from the village of Sosnovka, surrounded by pine forests. The logo is pine tree rings; originally one ring per year in design. Decision: keep 3 rings (legibility tested at 16 px), the real year count lives in the "Srez" cut on the site, which adds a ring every January. Logo = sprout, cut = trunk.
 - [ ] New IA: /, /work, /now, /writing, /about (+ /ru mirrors); old /projects/* URLs stay
 - [ ] Remove "Available / Contract / Full-time" badge and CV from nav at relaunch
