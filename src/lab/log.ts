@@ -34,6 +34,7 @@ const SHARED = /* glsl */ `
 uniform vec3 uWobble[4];
 uniform float uGrow;
 uniform float uTime;
+uniform float uLogo;                   // 0..1: the cut turns into the 3-ring logo
 varying vec3 vLocal;
 float outlineF(float th){ float f = 1.0; for (int i = 0; i < 4; i++){ f += uWobble[i].y * sin(uWobble[i].x * th + uWobble[i].z); } return f; }
 vec3 perturbN(vec3 surf_pos, vec3 surf_norm, vec2 dHdxy, float faceDirection){
@@ -57,6 +58,7 @@ uniform vec2 uSideHi;                  // dim client / own halves
 uniform float uBarkStart;
 uniform float uCracks;                 // 0..1 draws radial checks
 uniform float uMicro;                  // fine false rings inside a year (look only)
+float wAlpha;
 
 float wHeight; vec3 wColor; float wRough; vec3 wEmissive;
 
@@ -81,6 +83,7 @@ void woodSample(vec2 p){
     float cam = 1.0 - smoothstep(0.0, 0.007, rr - edge);
     wColor = mix(bark, barkIn, cam * 0.7);
     wHeight = -0.4 + 0.5 * b; wRough = 0.95; wEmissive = vec3(0.0);
+    wAlpha = 1.0 - uLogo;
     return;
   }
 
@@ -194,6 +197,20 @@ void woodSample(vec2 p){
     }
   }
 
+  // finale: only the three rings of the logo stay, in ink, everything else dissolves
+  wAlpha = 1.0;
+  if (uLogo > 0.0) {
+    float aw = fwidth(w) * 0.8;
+    float band = smoothstep(0.12 - aw, 0.12 + aw, w) * (1.0 - smoothstep(0.30 - aw, 0.30 + aw, w))
+               + smoothstep(0.50 - aw, 0.50 + aw, w) * (1.0 - smoothstep(0.67 - aw, 0.67 + aw, w))
+               + smoothstep(0.83 - aw, 0.83 + aw, w) * (1.0 - smoothstep(1.0 - aw, 1.0 + aw, w));
+    col = mix(col, vec3(0.12, 0.17, 0.14), uLogo);
+    emi *= 1.0 - uLogo;
+    h *= 1.0 - uLogo;
+    rough = mix(rough, 1.0, uLogo);
+    wAlpha = mix(1.0, band, uLogo);
+  }
+
   wColor = col; wHeight = h; wRough = rough; wEmissive = emi;
 }
 `;
@@ -244,6 +261,7 @@ export interface LogHandle {
   setKnotHi(i: number, v: number): void;
   setActiveRing(i: number, amt: number): void;
   setSideHi(client: number, own: number): void;
+  setLogo(v: number): void;
   /** local disc point (x,z in geometry units) -> polar on the data scale */
   toPolar(local: THREE.Vector3): { theta: number; w: number };
   /** polar on the data scale -> point on the top face, in group space */
@@ -291,6 +309,7 @@ export function createLog(opts: LogOptions): LogHandle {
     uBarkStart: { value: BARK_START },
     uCracks: { value: opts.cracks === false ? 0 : 1 },
     uMicro: { value: opts.micro ?? 3 },
+    uLogo: { value: 0 },
     uRadius: { value: radius },
   };
 
@@ -300,7 +319,7 @@ export function createLog(opts: LogOptions): LogHandle {
     patchVertex(shader);
     shader.fragmentShader = shader.fragmentShader
       .replace('#include <common>', `#include <common>\nuniform float uRadius;\n${NOISE}\n${SHARED}\n${WOOD}`)
-      .replace('#include <map_fragment>', `woodSample(vLocal.xz / uRadius * uGrow);\ndiffuseColor.rgb = pow(wColor, vec3(2.2));`)
+      .replace('#include <map_fragment>', `woodSample(vLocal.xz / uRadius * uGrow);\ndiffuseColor.rgb = pow(wColor, vec3(2.2));\ndiffuseColor.a *= wAlpha;`)
       .replace('#include <roughnessmap_fragment>', `float roughnessFactor = wRough;`)
       .replace('#include <normal_fragment_maps>', `
         vec2 dH = vec2(dFdx(wHeight), dFdy(wHeight));
@@ -315,12 +334,14 @@ export function createLog(opts: LogOptions): LogHandle {
     patchVertex(shader);
     shader.fragmentShader = shader.fragmentShader
       .replace('#include <common>', `#include <common>\nuniform float uRadius;\n${NOISE}\n${SHARED}\n${BARK}`)
-      .replace('#include <map_fragment>', `barkSample(vLocal / uRadius);\ndiffuseColor.rgb = pow(bColor, vec3(2.2));`)
+      .replace('#include <map_fragment>', `barkSample(vLocal / uRadius);\ndiffuseColor.rgb = pow(bColor, vec3(2.2));\ndiffuseColor.a *= 1.0 - uLogo;`)
       .replace('#include <normal_fragment_maps>', `
         vec2 dH = vec2(dFdx(bHeight), dFdy(bHeight));
         normal = perturbN(-vViewPosition, normal, dH * 0.02, faceDirection);`);
   };
   bark.customProgramCacheKey = () => 'bark-v1';
+  wood.transparent = true;
+  bark.transparent = true;
 
   // CylinderGeometry groups: 0 side, 1 top, 2 bottom
   const mesh = new THREE.Mesh(geo, [bark, wood, wood]);
@@ -336,6 +357,11 @@ export function createLog(opts: LogOptions): LogHandle {
     setKnotHi(i, v) { uniforms.uKnotHi.value[i] = v; },
     setActiveRing(i, amt) { uniforms.uActiveRing.value = i; uniforms.uActiveAmt.value = amt; },
     setSideHi(c, o) { uniforms.uSideHi.value.set(c, o); },
+    setLogo(v) {
+      uniforms.uLogo.value = v;
+      mesh.scale.y = 1 - 0.97 * v;
+      wood.depthWrite = v < 0.5; bark.depthWrite = v < 0.5;
+    },
     toPolar(local) {
       // local is in mesh space (geometry units, before scale)
       const x = local.x / radius * uniforms.uGrow.value;

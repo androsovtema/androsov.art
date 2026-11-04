@@ -106,7 +106,7 @@ export function buildRings(): Ring[] {
   const raw = years.map((y) => {
     const count = projects.filter((p) => p.start < y + 1 && (p.end ?? NOW) >= y).length;
     const partial = y === CURRENT_YEAR ? Math.min(1, NOW - y) : 1;
-    return { year: y, count, partial, w: (1 + 0.55 * count) * partial };
+    return { year: y, count, partial, w: (0.7 + 0.9 * count) * partial };
   });
   const total = raw.reduce((s, r) => s + r.w, 0);
   let r = PITH;

@@ -55,7 +55,7 @@ export function startCut() {
   const pivot = new THREE.Group();
   pivot.add(log.group);
   scene.add(pivot);
-  const shadow = blobShadow(3.2, 0.42);
+  const shadow = blobShadow(2.6, 0.5);
   shadow.position.y = -log.height / 2 - 0.002;
   pivot.add(shadow);
 
@@ -109,14 +109,26 @@ export function startCut() {
       el.style.transform = `translate(calc(${p.x - 6}px - 100%), ${p.y - 8}px)`;
       el.classList.toggle('is-active', isActive);
     }
+    const W = stage.clientWidth;
     const pr = project(log.fromPolar(0, 1.04));
-    sideLabels[0].style.transform = `translate(${pr.x + 10}px, ${pr.y - 9}px)`;
+    const rw = sideLabels[0].offsetWidth, lw = sideLabels[1].offsetWidth;
+    sideLabels[0].style.transform = `translate(${Math.min(pr.x + 10, W - rw - 10)}px, ${pr.y - 9}px)`;
     const pl = project(log.fromPolar(Math.PI, 1.04));
-    sideLabels[1].style.transform = `translate(calc(${pl.x - 10}px - 100%), ${pl.y - 9}px)`;
+    sideLabels[1].style.transform = `translate(${Math.max(pl.x - 10 - lw, 10)}px, ${pl.y - 9}px)`;
     sideLabels.forEach((s) => (s.style.opacity = grow > 0.98 && !mobile ? '1' : '0'));
   }
 
   // ---------- layout ----------
+  let baseDist = 6;
+  const logoMix = { v: 0, t: 0 };
+  function placeCamera() {
+    const L = THREE.MathUtils.smootherstep(logoMix.v, 0, 1);
+    const elev = THREE.MathUtils.degToRad(THREE.MathUtils.lerp(mobile ? 50 : 46, 89.5, L));
+    const dist = baseDist * (1 + 0.9 * L);
+    camera.position.set(0, Math.sin(elev) * dist, Math.cos(elev) * dist);
+    camera.lookAt(0, (mobile ? -0.05 : 0.02) * (1 - L), 0);
+  }
+
   function resize() {
     const w = stage.clientWidth, h = stage.clientHeight;
     renderer.setSize(w, h, false);
@@ -124,10 +136,9 @@ export function startCut() {
     // fit the disc (radius ~1.05) into the stage with some air
     const fitH = 1.05 / Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
     const fitW = fitH / Math.min(1, camera.aspect);
-    const dist = Math.max(fitH * 1.3, fitW * (mobile ? 1.12 : 1.32));
-    const elev = THREE.MathUtils.degToRad(mobile ? 50 : 46);
-    camera.position.set(0, Math.sin(elev) * dist, Math.cos(elev) * dist);
-    camera.lookAt(0, mobile ? -0.05 : 0.02, 0);
+    const dist = Math.max(fitH * (mobile ? 1.12 : 1.3), fitW * (mobile ? 0.98 : 1.32));
+    baseDist = dist;
+    placeCamera();
     camera.updateProjectionMatrix();
     needs = true;
   }
@@ -149,31 +160,40 @@ export function startCut() {
       hot = i;
       if (i >= 0) {
         knotHi[i].t = 1;
-        const el = items.get(data.knots[i].slug);
-        el?.classList.add('is-hot');
-        if (from === 'disc' && el && !mobile) {
-          // keep the list in sync without stealing scroll on every hover
-        }
+        items.get(data.knots[i].slug)?.classList.add('is-hot');
       }
       stage.classList.toggle('is-hot', i >= 0 && from === 'disc');
       needs = true;
     }
-    if (i >= 0) {
-      const p = data.projects.find((x) => x.slug === data.knots[i].slug)!;
-      tip.innerHTML = `${p.title}<small>${p.dateLabel}</small>`;
-      let x = clientX, y = clientY;
-      if (x === undefined || y === undefined) {
-        const k = data.knots[i];
-        const pt = project(log.fromPolar(k.angle, k.r1));
-        x = pt.x; y = pt.y;
-      } else {
-        const b = stage.getBoundingClientRect();
-        x -= b.left; y -= b.top;
-      }
-      tip.style.left = `${x}px`;
-      tip.style.top = `${y}px`;
-      tip.classList.add('is-on');
-    } else tip.classList.remove('is-on');
+    void clientX; void clientY;
+    placeTip();
+  }
+
+  const leader = document.getElementById('leader') as unknown as SVGSVGElement;
+  const leaderLine = leader.querySelector('line')!;
+  function placeTip() {
+    if (hot < 0) { tip.classList.remove('is-on'); leader.classList.remove('is-on'); return; }
+    const k = data.knots[hot];
+    const p = data.projects.find((x) => x.slug === k.slug)!;
+    tip.innerHTML = `${p.title}<small>${p.dateLabel}</small>`;
+    // from the knot tip, outwards from the center of the cut
+    const end = project(log.fromPolar(k.angle, k.r1));
+    const c = project(log.fromPolar(0, 0));
+    let dx = end.x - c.x, dy = end.y - c.y;
+    const len = Math.hypot(dx, dy) || 1;
+    dx /= len; dy /= len;
+    const W = stage.clientWidth, H = stage.clientHeight;
+    const reach = mobile ? 26 : 44;
+    let ax = end.x + dx * reach, ay = end.y + dy * reach;
+    const right = dx >= 0;
+    const tw = tip.offsetWidth || 140;
+    ax = right ? Math.min(ax, W - tw - 8) : Math.max(ax, tw + 8);
+    ay = Math.min(Math.max(ay, 30), H - 60);
+    tip.style.transform = `translate(${right ? ax + 6 : ax - 6}px, ${ay - 12}px) translateX(${right ? '0' : '-100%'})`;
+    tip.style.textAlign = right ? 'left' : 'right';
+    leaderLine.setAttribute('x1', String(end.x)); leaderLine.setAttribute('y1', String(end.y));
+    leaderLine.setAttribute('x2', String(ax)); leaderLine.setAttribute('y2', String(ay));
+    tip.classList.add('is-on'); leader.classList.add('is-on');
   }
 
   function pickAt(clientX: number, clientY: number) {
@@ -201,7 +221,12 @@ export function startCut() {
     if (i < 0) { setHot(-1, 'disc'); return; }
     const p = data.projects.find((x) => x.slug === data.knots[i].slug)!;
     // touch: first tap shows, second tap opens
-    if (e.pointerType !== 'mouse' && hot !== i) { setHot(i, 'disc', e.clientX, e.clientY); return; }
+    if (e.pointerType !== 'mouse' && hot !== i) {
+      setHot(i, 'disc');
+      const li = items.get(p.slug);
+      if (li) window.scrollTo({ top: li.getBoundingClientRect().top + scrollY - stage.clientHeight - 40, behavior: reduce ? 'auto' : 'smooth' });
+      return;
+    }
     if (p.href) {
       if (p.href.startsWith('http')) window.open(p.href, '_blank', 'noopener');
       else location.href = p.href;
@@ -221,6 +246,7 @@ export function startCut() {
   });
 
   // halves
+  const sidesEl = document.querySelector('.sides') as HTMLElement;
   const sideBtns = document.querySelectorAll<HTMLButtonElement>('.sides button');
   let sideSel: Side | null = null;
   sideBtns.forEach((b) => {
@@ -261,6 +287,16 @@ export function startCut() {
     if (en.isIntersecting) { active.t = 0; sections.forEach((s) => s.classList.remove('is-active')); needs = true; }
   }, { rootMargin: '-40% 0px -40% 0px' }).observe(intro);
 
+  // finale: as the contacts come up, the cut turns into the logo
+  const foot = document.querySelector('.foot') as HTMLElement;
+  const onScroll = () => {
+    const top = foot.getBoundingClientRect().top;
+    logoMix.t = THREE.MathUtils.clamp((innerHeight - top) / (innerHeight * 0.55), 0, 1);
+    if (Math.abs(logoMix.t - logoMix.v) > 0.001) needs = true;
+  };
+  addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
   // ---------- loop ----------
   const fpsEl = document.getElementById('fps')!;
   if (showFps) fpsEl.hidden = false;
@@ -299,6 +335,13 @@ export function startCut() {
       if (Math.abs(side[b] - side[a]) > 0.002) { side[a] = approach(side[a], side[b], dt, 8); moving = true; } else side[a] = side[b];
     }
     log.setSideHi(side.c, side.o);
+    if (Math.abs(logoMix.t - logoMix.v) > 0.001) { logoMix.v = reduce ? logoMix.t : approach(logoMix.v, logoMix.t, dt, 6); moving = true; } else logoMix.v = logoMix.t;
+    log.setLogo(THREE.MathUtils.smootherstep(logoMix.v, 0, 1));
+    (shadow.material as THREE.MeshBasicMaterial).opacity = 1 - logoMix.v;
+    labelsEl.style.opacity = String(1 - Math.min(1, logoMix.v * 2));
+    sidesEl.style.opacity = String(1 - Math.min(1, logoMix.v * 2));
+    sidesEl.style.visibility = logoMix.v > 0.5 ? 'hidden' : '';
+    placeCamera();
     if (!reduce) {
       if (Math.abs(tilt.tx - tilt.x) + Math.abs(tilt.ty - tilt.y) > 0.0005) {
         tilt.x = approach(tilt.x, tilt.tx, dt, 4); tilt.y = approach(tilt.y, tilt.ty, dt, 4); moving = true;
@@ -311,6 +354,7 @@ export function startCut() {
     if (moving || needs) {
       renderer.render(scene, camera);
       placeLabels();
+      if (hot >= 0) placeTip();
       needs = false;
       if (!stage.classList.contains('is-3d')) stage.classList.add('is-3d');
     }
