@@ -1,0 +1,135 @@
+---
+import LabLayout from '../../layouts/LabLayout.astro';
+import { ringsSvg } from '../../lab/ringStudy';
+import logoSvg from '../../../public/assets/icons/ArtLogo.svg?raw';
+
+const counts = [3, 4, 5, 7];
+const sizes = [16, 32, 64, 160];
+
+const variants = [
+  {
+    id: 'burned',
+    name: 'Выжженный на спиле',
+    where: 'Главная, финальный кадр «Среза»: спил сворачивается в логотип. Подходит для обложек статей и OG-картинок.',
+    why: 'Самый прямой смысл: знак выжжен на той самой сосне. Курсор работает как скользящий свет, и рельеф читается.',
+    risk: 'Уходит в «ремесло и рустик». Без строгой типографики рядом выглядит как сувенир.',
+  },
+  {
+    id: 'resin',
+    name: 'Живица',
+    where: 'Шапка страницы «Обо мне» или 404. Маленьким не работает: стекло на 32 px — просто жёлтое пятно.',
+    why: 'Живица — собственный материал сосны. Внутри застряла хвоинка, как насекомое в янтаре. Самый эффектный вариант.',
+    risk: 'Самый тяжёлый: стекло с преломлением в three.js рендерит сцену дважды. На слабых телефонах заметно.',
+  },
+  {
+    id: 'growth',
+    name: 'Рост',
+    where: 'Загрузка сайта и переходы между страницами вместо Lottie.',
+    why: 'Повторяет текущую Lottie-анимацию, но в объёме: кольца откладываются по одному, как в стволе за годы.',
+    risk: 'Объём здесь почти ничего не добавляет к 2D. Честно: Lottie за 30 КБ справляется не хуже.',
+  },
+  {
+    id: 'layers',
+    name: 'Разбор на слои',
+    where: 'Раздел «Обо мне», абзац про Сосновку. Прокрутка разводит кольца.',
+    why: 'Показывает, как устроен знак: сердцевина и два кольца. Объясняет логотип без слов.',
+    risk: 'Цвета взяты из палитры сайта, а не из дерева. Отдельно от текста не читается.',
+  },
+];
+---
+<LabLayout title="Logo in 3D — lab">
+  <main class="wrap">
+    <p class="back"><a href="/lab">Лаборатория</a></p>
+    <h1>Логотип в 3D: четыре варианта</h1>
+    <p class="lead">
+      Все четыре собраны из того же SVG, что и сейчас на сайте (<code>ArtLogo.svg</code>), без моделирования.
+      Двигайте курсором по картинке. Ниже — исследование, сколько колец выдерживает знак.
+    </p>
+
+    <div class="grid">
+      {variants.map((v) => (
+        <figure>
+          <canvas data-variant={v.id} aria-label={v.name}></canvas>
+          <div class="fallback" set:html={logoSvg} />
+          <figcaption>
+            <h2>{v.name}</h2>
+            <dl>
+              <dt>Где</dt><dd>{v.where}</dd>
+              <dt>Зачем</dt><dd>{v.why}</dd>
+              <dt>Минус</dt><dd>{v.risk}</dd>
+            </dl>
+          </figcaption>
+        </figure>
+      ))}
+    </div>
+
+    <section class="study">
+      <h2>Сколько колец</h2>
+      <p>
+        Тот же почерк колец, разное их число, в реальных размерах: 16 px (вкладка браузера), 32, 64, 160.
+        Смотрите на 16 и 32: на этих размерах логотип видят чаще всего.
+      </p>
+      <table>
+        <thead>
+          <tr><th scope="col">Колец</th>{sizes.map((s) => <th scope="col">{s} px</th>)}</tr>
+        </thead>
+        <tbody>
+          {counts.map((n) => (
+            <tr>
+              <th scope="row">{n}{n === 3 ? ' (сейчас)' : ''}</th>
+              {sizes.map((s) => <td><span class="ring" style={`width:${s}px;height:${s}px`} set:html={ringsSvg(n)} /></td>)}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <p class="verdict">
+        Вывод (проверено на рендере 1x и 2x): на обычном экране при 16 px три кольца читаются чисто, четыре на грани,
+        пять и больше превращаются в рябь. На ретине держатся четыре-пять. Знак стоит оставить на трёх кольцах.
+        Настоящее число лет показывает спил на главной: там одно кольцо — один год, и он сам добавляет кольцо каждый январь.
+        Логотип — это росток, спил — это ствол.
+      </p>
+    </section>
+  </main>
+
+  <script>
+    import { startLogoLab } from '../../lab/logoScenes';
+    startLogoLab();
+  </script>
+</LabLayout>
+
+<style>
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 40px 28px 96px; }
+  .back a { color: var(--needle-2); font-size: 15px; }
+  h1 { font-size: clamp(30px, 4vw, 52px); font-weight: 380; letter-spacing: -0.03em; line-height: 1.05; margin: 12px 0 16px; }
+  .lead { max-width: 60ch; color: var(--needle-2); margin: 0 0 40px; }
+  code { font-size: 0.9em; }
+  .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px 28px; }
+  figure { margin: 0; position: relative; }
+  canvas { display: block; width: 100%; aspect-ratio: 1; border-radius: 10px; background: var(--fog-2); }
+  .fallback { display: none; }
+  figure.no-gl canvas { display: none; }
+  figure.no-gl .fallback { display: grid; place-items: center; aspect-ratio: 1; background: var(--fog-2); border-radius: 10px; }
+  figure.no-gl .fallback :global(svg) { width: 40%; height: auto; }
+  figcaption h2 { font-size: 22px; font-weight: 500; letter-spacing: -0.015em; margin: 16px 0 8px; }
+  dl { margin: 0; display: grid; grid-template-columns: 64px 1fr; gap: 6px 12px; font-size: 15px; }
+  dt { color: var(--needle-2); }
+  dd { margin: 0; max-width: 52ch; }
+
+  .study { margin-top: 88px; padding-top: 32px; border-top: 1px solid rgba(31, 43, 36, 0.14); }
+  .study h2 { font-size: 32px; font-weight: 400; letter-spacing: -0.02em; margin: 0 0 12px; }
+  .study p { max-width: 62ch; }
+  table { border-collapse: collapse; margin: 28px 0; }
+  th, td { padding: 12px 20px 12px 0; text-align: left; vertical-align: middle; font-weight: 400; font-size: 15px; }
+  thead th { color: var(--needle-2); }
+  tbody th { white-space: nowrap; }
+  .ring { display: block; color: var(--needle); }
+  .ring :global(svg) { width: 100%; height: 100%; display: block; }
+  .verdict { font-size: 18px; }
+
+  @media (max-width: 820px) {
+    .wrap { padding: 24px 16px 64px; }
+    .grid { grid-template-columns: 1fr; }
+    .study { overflow-x: auto; }
+    th, td { padding-right: 12px; }
+  }
+</style>

@@ -5,4 +5,5 @@ import { defineConfig } from 'astro/config';
 export default defineConfig({
   output: 'static',
   site: 'https://androsov.art',
+  devToolbar: { enabled: false },
 });

@@ -1,0 +1,50 @@
+---
+// Layout for the 3D sandbox. Not linked from the live site, never indexed.
+import '@fontsource-variable/geologica';
+
+interface Props { title: string; }
+const { title } = Astro.props;
+---
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="theme-color" content="#DCE1DB">
+    <title>{title}</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/icons/favicon-32x32.png">
+    <style is:global>
+      :root {
+        --fog: #DCE1DB;
+        --fog-2: #CDD4CC;
+        --needle: #1F2B24;
+        --needle-2: #4A574F;
+        --moss: #44603E;
+        --resin: #E3A12F;
+        --font: 'Geologica Variable', system-ui, sans-serif;
+      }
+      *, *::before, *::after { box-sizing: border-box; }
+      html { -webkit-text-size-adjust: 100%; }
+      body {
+        margin: 0;
+        background: var(--fog);
+        color: var(--needle);
+        font-family: var(--font);
+        font-size: 17px;
+        line-height: 1.5;
+        font-weight: 360;
+        -webkit-font-smoothing: antialiased;
+      }
+      a { color: inherit; }
+      :focus-visible { outline: 2px solid var(--moss); outline-offset: 3px; border-radius: 4px; }
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after { transition-duration: 0.01ms !important; animation-duration: 0.01ms !important; }
+      }
+    </style>
+    <slot name="head" />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>
