@@ -297,6 +297,16 @@ export function startCut() {
   addEventListener('scroll', onScroll, { passive: true });
   onScroll();
 
+  // recording hook (?rec): screen position of a knot, for scripted demos
+  if (params.has('rec')) {
+    (window as any).__knotAt = (slug: string) => {
+      const k = data.knots.find((x) => x.slug === slug)!;
+      const pt = project(log.fromPolar(k.angle, (k.r0 + k.r1) / 2));
+      const b = stage.getBoundingClientRect();
+      return { x: pt.x + b.left, y: pt.y + b.top };
+    };
+  }
+
   // ---------- loop ----------
   const fpsEl = document.getElementById('fps')!;
   if (showFps) fpsEl.hidden = false;
