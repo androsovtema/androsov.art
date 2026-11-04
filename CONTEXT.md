@@ -93,12 +93,13 @@ These drive all his content choices. When in doubt, prefer the principle over th
 ## 6. We Designerz
 
 - **wedesignerz.com** (live, RU-language): club for vibe coders — people building products with AI, often without coding background. Project showcase with moderation and "Выбор клуба" badge, structured feedback (bug / idea / UX), threaded discussions, versioned project updates, free Academy guides (paying for AI from Russia, making a game with AI, pre-publication security, GitHub Pages hosting). Core is free; paid features "later". Hero: «Если смог описать — можешь создать.» Links: Telegram channel wedesignerz, chat wdzclub, YouTube @wedesignerz.
-- **Team (wedesignerz.com/about.html):** 4 people — Тёма (Art; «вайбкодер и ведущий»: vibe-codes the platform and hosts the channel), Алина (designer), Андрей (producer), Рома (product & marketing, socials). Copy uses «мы» / «делаем вчетвером». Don't name teammates on androsov.art — link to wedesignerz instead.
+- **Art is the founder.** He invented and built We Designerz himself: YouTube channel → design studio under this name → club for vibe coders. The team joined later; for now Art still does most of the work. He doesn't care about titles and doesn't want to offend anyone — the project living matters to him. Copy: «придумал и сделал», «развиваем вчетвером». Never «всё делаю я один».
+- **Team (wedesignerz.com/about.html):** 4 people — Тёма (Art), Алина (designer), Андрей (producer), Рома (product & marketing). Real split: Art — platform, appears in all videos, editing (via AI), all socials (accounts are his, access shared). Рома — topics, some scripts, Instagram posts. Don't name teammates on androsov.art — link to wedesignerz instead.
 - Art is listed only as «Тёма», no surname, no link to androsov.art; Organization JSON-LD has no founder/member. Fix on wedesignerz side = cheapest entity link.
 - Don't publish wedesignerz numbers (members/projects/subscribers) yet — Art: nothing to be proud of yet.
 - Site itself is strong case material: CSP, carefully commented robots.txt, JSON-LD, JSON/RSS feeds, indexing opened 2026-08-29.
 - YouTube channel: 370K+ views (383K+ on the site), growing organically since 2024. Primary topic: AI in work and life; secondary: design.
-- Not a registered company: don't write "studio"/"agency". "Team" is fine (the platform itself says so). Bio uses "co-founder" — pending Art's confirmation.
+- Not a registered company: don't write "studio"/"agency". "Team" is fine (the platform itself says so). Bio uses "founder" (confirmed 2026-11-04). "Was a design studio" is fine as history.
 
 ## 7. Schedule & timezone
 
@@ -173,7 +174,8 @@ Things in progress or pending:
 ### Redesign 2026 (see docs/redesign-plan.md)
 - [x] New positioning + RU/EN copy drafts, bios, FAQ — `docs/positioning-2026.md`
 - [x] Open questions answered (we/team, no numbers, automation examples, name, Intense permission)
-- [ ] Confirm "co-founder" wording; clarify socials (Art said he runs platform socials, wedesignerz about page assigns socials to Рома)
+- [x] Role: founder; socials/videos on Art, Рома — topics, some scripts, Instagram posts
+- [ ] Optional: align wedesignerz about.html roles (currently «Рома ведёт соцсети»)
 - [ ] Canonical name in code: titles "Artem Androsov" → "Art Androsov"
 - [ ] Person JSON-LD, sitemap, robots.txt, hreflang; un-noindex RU after RU copy cleanup
 - [ ] wedesignerz.com: add surname + link to androsov.art on «Тёма» card; founder/member in Organization JSON-LD
